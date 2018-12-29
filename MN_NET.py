@@ -4,6 +4,7 @@ import numpy as np
 import os
 import torch.autograd
 import torch.optim as optim
+ patch-2
 import torch.nn.functional as F 
 from torchvision import models
 
@@ -14,6 +15,7 @@ class MN_NET(torch.nn.Module):
         super(MN_NET, self).__init__()
         self.batch_size = batch_size
         self.hidden_size = hidden_size
+
         self.num_layers = num_layers
         self.categories = action_categories
         self.seq_len = seq_len
@@ -35,8 +37,9 @@ class MN_NET(torch.nn.Module):
         
         
         
-    def forward(self, img):
-        self.h_init = torch.rand((self.num_layers,self.batch_size,256))
+        
+    def forward(img):
+        self.h_init = torch.rand((self.num_layers,batch_size,256))
         img = self.resnet(img)
         img = img.view(-1,2048*7*7)
 
@@ -57,6 +60,8 @@ class MN_NET(torch.nn.Module):
        	h_out = F.softmax(self.linear_classifier(h_out))
 
        	return output,h_out
+
+
 
 
 if __name__ == '__main__':
