@@ -4,7 +4,6 @@ import numpy as np
 import os
 import torch.autograd
 import torch.optim as optim
- patch-2
 import torch.nn.functional as F 
 from torchvision import models
 
@@ -63,12 +62,6 @@ class MN_NET(torch.nn.Module):
 
 
 
-
-if __name__ == '__main__':
-    mn_obj = MN_NET(1,1,action_categories=3)
-    z = torch.rand([1,3,224,224])
-    out, hout = mn_obj.forward(z)
-    print(out.size(), hout.size())
 
 
 
