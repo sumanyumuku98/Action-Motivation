@@ -26,7 +26,7 @@ class Dataset(data.Dataset):
     def __getitem__(self, index):
         label = []#list of annotation id  for one image
         ann = []# top 3  annotation from list of annotations for one image
-        padding = 20
+        padding = 20 #assumption for now, ideally max length of annotation
         print('INDEXXXX', index)
         id = self.imgIds[index]
         label = self.labelIds[index]
