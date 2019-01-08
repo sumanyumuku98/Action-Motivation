@@ -27,10 +27,14 @@ class L:
         self.coco_caps=COCO(self.annfile)
         # load and display caption annotations
         self.catIds = self.coco.getCatIds(catNms=['person']);
-        temp = self.coco.getImgIds(catIds=self.catIds );
-        self.imgIds = []
-        for i in range(0, 10):
-            self.imgIds.append(temp[i])
+        self.imgIds = self.coco.getImgIds(catIds=self.catIds );
+        
+        #Considering few data for quick testing purposes
+        
+#         temp = self.coco.getImgIds(catIds=self.catIds );
+#         self.imgIds = []
+#         for i in range(0, 10):  
+#             self.imgIds.append(temp[i])
 
     def call(self):
 
