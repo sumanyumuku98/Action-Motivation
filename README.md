@@ -1,2 +1,3 @@
 # Action-Motivation
-Research project to detect motivations behind actions using saliency based attention and gaze following.
+Research project to detect intrinsic motivations behind actions using an encoder - decoder network.
+(Work in Progress).
