@@ -93,8 +93,7 @@ def train(model,data_loader,epochs = 10,checkpoint = 10):
        outputs = model(images,captions,lengths)
        loss = loss_criterion(outputs,targets)
 
-       decoder.zero_grad()
-       encoder.zero_grad()
+       model.zero_grad()
        loss.backward()
        optimizer.step()
 
