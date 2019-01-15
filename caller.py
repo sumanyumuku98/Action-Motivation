@@ -77,7 +77,8 @@ def main():
     train__dataset = Dataset(imageList, AnnotationList, vocab2)
     print(train__dataset)
     train_loader = torch.utils.data.DataLoader(train__dataset, batch_size = 5, shuffle = True)
-    print(type(train_loader))
-    for image, annVecList in train_loader:
-        for annVec in annVecList:
-            print(len(image), len(annVec))
+    return train_loader;
+    #     print(type(train_loader))
+#     for image, annVecList in train_loader:
+#         for annVec in annVecList:
+#             print(len(image), len(annVec))
