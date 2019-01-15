@@ -58,7 +58,7 @@ class Dataset(data.Dataset):
         return x, annotations
 
 
-if __name__ == '__main__':
+def main():
     print('çaller')
     load = loader.L()
     imageList,AnnotationList = load.call()
