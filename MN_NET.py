@@ -6,8 +6,7 @@ import torch.autograd
 import torch.optim as optim
 import torch.nn.functional as F 
 from torchvision import models, transforms
-import sys
-import sys.path
+
 from torch.nn.utils.rnn import pack_padded_sequence 
 #import nltk
 #from nltk.corpus import stopwords
