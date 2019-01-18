@@ -27,20 +27,17 @@ class L:
         self.coco_caps=COCO(self.annfile)
         # load and display caption annotations
         self.catIds = self.coco.getCatIds(catNms=['person']);
-        self.imgIds = self.coco.getImgIds(catIds=self.catIds );
-        
-        #Considering few data for quick testing purposes
-        
-#         temp = self.coco.getImgIds(catIds=self.catIds );
-#         self.imgIds = []
-#         for i in range(0, 10):  
-#             self.imgIds.append(temp[i])
+        temp = self.coco.getImgIds(catIds=self.catIds );
+        self.imgIds = []
+        for i in range(0, 10):
+            self.imgIds.append(temp[i])
 
     def call(self):
 
         print('No. of images, category : people - ', len(self.imgIds))
         # j = 0
-        ffann=[]
+        ffann = []
+        imgMap = []
         for imgId in self.imgIds:
             # if(j==2):
             #     break     #To avoid loading all the annotations,  just for testing purposes
@@ -50,6 +47,7 @@ class L:
             img = self.coco.loadImgs(self.imgIds[np.random.randint(0,len(self.imgIds))])[0]
             I = io.imread('C:/Users/pasan/Documents/Motivation/cocoapi-master/PythonAPI/train2017/'+img['file_name'])#img['coco_url']
             K = torch.from_numpy(I)
+            imgMap.append({imgId : img['coco_url']})
             # print('\n\nImage Id: ', imgId, '\n')
             # print( 'image tensor shape: ', K.shape)
             annIds = self.coco_caps.getAnnIds(imgId)
@@ -60,15 +58,15 @@ class L:
                     i = i+1
             # print('Annotation IDs: ')
             # print(fann)
-            ffann.append(fann)
+            labels = self.getLabel(fann)
+            ffann.append(labels)
             # anns = self.coco_caps.loadAnns(fann)
             # # print('\n 3 top selected Annotations: ')
             # anns = self.coco_caps.showAnns(anns)
             # anns = str(anns)
             # print('\nType of anotations', type(anns))
             # j = j+1
-        print(ffann)
-        return self.imgIds, ffann
+        return imgMap, ffann
 
 
     def getimage(self, id):
