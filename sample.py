@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import pickle as pkl
-from torch
+import torch
 from torchvision import transforms
 from Vocabuilder import Vocabulary
 from PIL import Image
