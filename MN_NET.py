@@ -56,9 +56,9 @@ class MN_NET(torch.nn.Module):
        	img = F.relu(self.linear_layer(img))
        	img = self.dropout(img)
        	img = self.linear_layer_embed(img)
-        features = self.bn(img)
+        self.features = self.bn(img)
         embeddings = self.embed_layer(captions)
-        embeddings = torch.cat((features.unsqueeze(1),embeddings), 1)
+        embeddings = torch.cat((self.features.unsqueeze(1),embeddings), 1)
 
        	packed = pack_padded_sequence(embeddings, lengths, batch_first=True) 
         outputs, _ = self.gru(packed,self.h_init)
@@ -72,6 +72,22 @@ class MN_NET(torch.nn.Module):
         outputs_fin = self.linear_to_vocab(outputs[0])
 
        	return outputs_fin
+     #Sampling Function for Generating Caption
+    def sample(self, features = self.features, states= self.h_init):
+        sampled_ids = []
+        inputs = features.unsqueeze(1)
+        # Looping for running GRU max_seq_len times.
+        for i in range(self.max_seq_len):
+            hiddens, states = self.gru(inputs, states)          
+            outputs = self.linear_to_vocab(hiddens.squeeze(1))            
+            _, predicted = outputs.max(1)                       
+            sampled_ids.append(predicted)
+            inputs = self.embed_layer(predicted)                      
+            inputs = inputs.unsqueeze(1)                         
+        
+        sampled_ids = torch.stack(sampled_ids, 1)                
+        
+        return sampled_ids
 
 
 
