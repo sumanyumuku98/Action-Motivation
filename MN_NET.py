@@ -17,7 +17,7 @@ MODEL_PATH = ''
 
 
 class MN_NET(torch.nn.Module):
-    def __init__(self, batch_size, seq_len=1,hidden_size = 2,embed_size = 1,vocab_size = 1, action_categories=0):
+    def __init__(self, batch_size=1, seq_len=1,hidden_size = 2,embed_size = 1,vocab_size = 1, action_categories=0):
         super(MN_NET, self).__init__()
         self.batch_size = batch_size
         self.hidden_size = hidden_size
@@ -50,15 +50,11 @@ class MN_NET(torch.nn.Module):
         
     def forward(self, img, captions,lengths):
         self.h_init = torch.rand((1,batch_size,self.hidden_size))
-        img = self.resnet(img)
-        img = img.view(-1,2048*7*7)
-
-       	img = F.relu(self.linear_layer(img))
-       	img = self.dropout(img)
-       	img = self.linear_layer_embed(img)
-        self.features = self.bn(img)
+        
+        features = self.get_embed_features(img)
+        
         embeddings = self.embed_layer(captions)
-        embeddings = torch.cat((self.features.unsqueeze(1),embeddings), 1)
+        embeddings = torch.cat((features.unsqueeze(1),embeddings), 1)
 
        	packed = pack_padded_sequence(embeddings, lengths, batch_first=True) 
         outputs, _ = self.gru(packed,self.h_init)
@@ -73,7 +69,7 @@ class MN_NET(torch.nn.Module):
 
        	return outputs_fin
      #Sampling Function for Generating Caption
-    def sample(self, features = self.features, states= self.h_init):
+    def sample(self, features, states= self.h_init):
         sampled_ids = []
         inputs = features.unsqueeze(1)
         # Looping for running GRU max_seq_len times.
@@ -88,6 +84,18 @@ class MN_NET(torch.nn.Module):
         sampled_ids = torch.stack(sampled_ids, 1)                
         
         return sampled_ids
+    
+    def get_embed_features(self,img):
+        img = self.resnet(img)
+        img = img.view(-1,2048*7*7)
+
+       	img = F.relu(self.linear_layer(img))
+       	img = self.dropout(img)
+       	img = self.linear_layer_embed(img)
+        features = self.bn(img)
+        
+        return features
+    
 
 
 
@@ -116,8 +124,12 @@ def train(model,data_loader,epochs = 10,checkpoint = 10):
         print('Epoch--->[{}/{}], Step--->[{}/{}], Loss--->{}'.format(epoch+1,epochs,i,total_step,loss.item()))
 
     if (epoch+1)%checkpoint==0:
-      torch.save(model.state_dict(),MODEL_PATH)
-
+        state = {
+        'epoch':epoch,
+        'state_dict':model.state_dict(),
+        'optimizer':optimizer.state_dict()
+        }
+        torch.save(state,MODEL_PATH)
   
 
 def preprocess_img(image):
