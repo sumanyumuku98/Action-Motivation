@@ -86,7 +86,27 @@ class L:
         return label
 
 
+def get_verbs(caption):
+    nltk.download('wordnet')
+    nltk.download('averaged_perceptron_tagger')
+    tokens = word_tokenize(caption)
+    tags = pos_tag(tokens)
+    
+    words,tag = zip(*tags)
+    words = list(words)
+    tag =list(tag)
+    verbs_list = []
+    
+    for index,tagg in enumerate(tag):
+        if tagg=='VB'or tagg=='VBD'or tagg=='VBG'or tagg=='VBN'or tagg=='VBP'or tagg=='VBZ':
+            verbs_list.append(words[index])
+    
+    lemmatizer = WordNetLemmatizer()  
+    lemmatized_list=[]
+    for verb in verbs_list:
+        lemmatized_list.append(lemmatizer.lemmatize(verb))
 
+    return lemmatized_list
 
 
 
