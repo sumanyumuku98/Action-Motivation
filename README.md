@@ -5,7 +5,7 @@
 
 ![Resnet-101](https://www.jeremyjordan.me/content/images/2018/04/Screen-Shot-2018-04-16-at-6.30.05-PM.png)
 
-- The decoder is a simple `GRU` cell to which encoded features are fed and image-captioning is done.
+- The decoder is a simple `GRU` cell to which encoded features are fed resulting in the decoded image-caption.
 
 ![Image-Captioning](https://cdn-images-1.medium.com/max/1600/1*6BFOIdSHlk24Z3DFEakvnQ.png)
 
